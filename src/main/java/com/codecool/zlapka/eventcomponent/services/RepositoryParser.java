@@ -16,18 +16,16 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
     private Class<T> tClass;
     private S repository;
 
-    public RepositoryParser() {}
-
     public RepositoryParser(Class<T> tClass, S repository) {
         this.tClass = tClass;
         this.repository = repository;
     }
 
     public String get(Map<String, String> parameters) {
-        String output = "";
-        if (parameters.keySet().isEmpty()) output = getAll();
-        else output = getAllByParams(parameters);
-        return output;
+        if (parameters.keySet().isEmpty())
+            return getAll();
+        else
+            return getAllByParams(parameters);
     }
 
     public Optional<T> add(String jsonElement) {
@@ -37,77 +35,31 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
     }
 
     public long delete(Map<String, String> parameters) {
-        long output = 0;
-        if (parameters.keySet().isEmpty()) output = deleteAll();
-        else output = deleteAllByParams(parameters);
-        return output;
-    }
-
-    public long replace(Map<String, String> parameters, String jsonElementsList) {
-        long output = 0;
-        if (parameters.keySet().isEmpty()) output = replaceAll(jsonElementsList);
-        else output = replaceAllByParams(parameters, jsonElementsList);
-        return output;
+        if (parameters.keySet().isEmpty())
+            return deleteAll();
+        else
+            return deleteAllByParams(parameters);
     }
 
     private String getAll(){
-        List<T> allElements = new ArrayList<>();
-        Iterable<T> elements = repository.findAll();
-        elements.forEach(allElements::add);
-        return jsonMapper.jsonRepresentation(elements);
+        return jsonMapper.jsonRepresentation(repository.findAll());
     }
 
     private String getAllByParams(Map<String, String> parameters) {
-        List<T> elements = findCommonElements(parameters);
-        return jsonMapper.jsonRepresentation(elements);
+        return jsonMapper.jsonRepresentation(findCommonElements(parameters));
     }
 
     private long deleteAll() {
+        long output = repository.count();
         repository.deleteAll();
-        return repository.count();
+        return output;
     }
 
     private long deleteAllByParams(Map<String, String> parameters) {
         List<T> elements = findCommonElements(parameters);
         if (elements.isEmpty()) return 0L;
-        long before = repository.count();
         repository.deleteAll(elements);
-        long after = repository.count();
-        if (before - after != elements.size()) return -1L;
-        return after;
-    }
-
-    private long replaceAll(String jsonElementsList) {
-        List<T> elements = jsonMapper.getListOfObjectsFromJson(jsonElementsList, tClass);
-        if (elements.isEmpty()) return 0L;
-
-        repository.deleteAll();
-        long currentNumberOfRows = repository.count();
-        if (currentNumberOfRows != 0) return -1;
-
-        repository.saveAll(elements);
-        currentNumberOfRows = repository.count();
-        if (currentNumberOfRows != elements.size()) return -1L;
-
-        return currentNumberOfRows;
-    }
-
-    private long replaceAllByParams(Map<String, String> parameters, String jsonElementsList) {
-        List<T> newElements = jsonMapper.getListOfObjectsFromJson(jsonElementsList, tClass);
-        List<T> foundElements = findCommonElements(parameters);
-        if (newElements.isEmpty() || foundElements.isEmpty()) return -1L;
-
-        long before = repository.count();
-        repository.deleteAll(foundElements);
-        long after = repository.count();
-        if (before - after != foundElements.size()) return -1L;
-
-        before = after;
-        repository.saveAll(newElements);
-        after = repository.count();
-        if (after - before != newElements.size()) return -1L;
-
-        return after;
+        return elements.size();
     }
 
     private <U> List<T> findCommonElements(Map<String, String> parameters) {
@@ -149,7 +101,7 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
         return Collections.emptyList();
     }
 
-    private <U> Object insertObjectIntoListIfItIsOptional(Object possiblyOptional) {
+    private Object insertObjectIntoListIfItIsOptional(Object possiblyOptional) {
         if (possiblyOptional instanceof Optional) {
             if (((Optional) possiblyOptional).isPresent()) return List.of(((Optional) possiblyOptional).get());
             else return Collections.emptyList();

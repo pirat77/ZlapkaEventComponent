@@ -1,16 +1,13 @@
 package com.codecool.zlapka.eventcomponent.model;
 
 public enum Category {
-    FPS("FPS"),
-    RPG("RPG"),
-    RTS("RTS"),
-    TPP("TPP"),
-    ARCADE("ARCADE"),
-    RACER("RACER"),
-    SPORT("SPORT"),
-    FIGHT("FIGHT"),
-    ADVENTURE("ADVENTURE"),
-    LOGIC("LOGIC");
+    DANCE("Dance"),
+    SPORT("Sport"),
+    ART("Art"),
+    OUTDOOR("Outdoor"),
+    EDUCATION("Education"),
+    CASUAL("Casual"),
+    BUSINESS("Business");
 
     private final String name;
 

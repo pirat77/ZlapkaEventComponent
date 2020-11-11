@@ -23,6 +23,7 @@ public class Event extends ZlapkaEntityModel {
     private int duration;
     @Column(name = "public_event")
     private boolean publicEvent;
+    private boolean archived;
     @Enumerated(EnumType.STRING)
     @Column(name = "category_id")
     private Category category;
@@ -55,7 +56,7 @@ public class Event extends ZlapkaEntityModel {
         this.id = id;
     }
 
-    public Event(Long id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, Category category, Location location, Organization organization, List<Ticket> tickets, List<User> userList) {
+    public Event(Long id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, List<Ticket> tickets, List<User> userList) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -64,6 +65,7 @@ public class Event extends ZlapkaEntityModel {
         this.time = time;
         this.duration = duration;
         this.publicEvent = publicEvent;
+        this.archived = archived;
         this.category = category;
         this.location = location;
         this.organization = organization;
@@ -125,6 +127,14 @@ public class Event extends ZlapkaEntityModel {
 
     public void setPublicEvent(boolean publicEvent) {
         this.publicEvent = publicEvent;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 
     public Category getCategory() {

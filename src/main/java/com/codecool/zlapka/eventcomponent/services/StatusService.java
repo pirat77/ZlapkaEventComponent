@@ -49,14 +49,14 @@ public class StatusService {
     }
 
     private ReturnMessage createMessageToReturn(int status, String operation, long numberOfRows, String path) {
-        String message = String.format("Operation %s succeed\nActual number records: %d",
+        String message = String.format("Operation %s succeed\nRows affected: %d",
                 operation.toUpperCase(), numberOfRows);
         return new ReturnMessage(new Date(System.currentTimeMillis()), status, "", message, path);
     }
 
     private ReturnMessage createErrorToReturn(int status, String operation, String message,
                                               long numberOfRows, String path) {
-        String error = String.format("Not able to do: %s\nActual number records: %d",
+        String error = String.format("Not able to do: %s\nRows affected: %d",
                 operation, numberOfRows);
         return new ReturnMessage(new Date(System.currentTimeMillis()), status, error, message, path);
     }
