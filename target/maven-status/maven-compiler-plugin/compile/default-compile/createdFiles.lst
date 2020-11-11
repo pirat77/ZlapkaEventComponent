@@ -1,0 +1,15 @@
+com/codecool/zlapka/eventcomponent/model/Organization.class
+com/codecool/zlapka/eventcomponent/ApplicationConfig.class
+com/codecool/zlapka/eventcomponent/controllers/EventController.class
+com/codecool/zlapka/eventcomponent/repositories/EventRepository.class
+com/codecool/zlapka/eventcomponent/model/User.class
+com/codecool/zlapka/eventcomponent/model/ZlapkaEntityModel.class
+com/codecool/zlapka/eventcomponent/services/JsonMapper.class
+com/codecool/zlapka/eventcomponent/model/Location.class
+com/codecool/zlapka/eventcomponent/services/StatusService.class
+com/codecool/zlapka/eventcomponent/services/RepositoryParser.class
+com/codecool/zlapka/eventcomponent/model/Category.class
+com/codecool/zlapka/eventcomponent/model/Ticket.class
+com/codecool/zlapka/eventcomponent/EventComponent.class
+com/codecool/zlapka/eventcomponent/model/ReturnMessage.class
+com/codecool/zlapka/eventcomponent/model/Event.class
