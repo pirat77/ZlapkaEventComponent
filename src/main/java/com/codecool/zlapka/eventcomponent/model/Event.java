@@ -36,9 +36,6 @@ public class Event extends ZlapkaEntityModel {
     @JoinColumn(name="organization_id", referencedColumnName = "organization_id")
     private Organization organization;
 
-    @OneToMany
-    private List<Ticket> tickets;
-
     @ManyToMany
     private List<User> userList;
 
@@ -56,7 +53,7 @@ public class Event extends ZlapkaEntityModel {
         this.id = id;
     }
 
-    public Event(Long id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, List<Ticket> tickets, List<User> userList) {
+    public Event(Long id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, List<User> userList) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -69,7 +66,6 @@ public class Event extends ZlapkaEntityModel {
         this.category = category;
         this.location = location;
         this.organization = organization;
-        this.tickets = tickets;
         this.userList = userList;
     }
 
@@ -159,14 +155,6 @@ public class Event extends ZlapkaEntityModel {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
     }
 
     public List<User> getUserList() {
