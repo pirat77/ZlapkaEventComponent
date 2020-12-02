@@ -8,10 +8,10 @@
 		<version>2.3.6.BUILD-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.codecool.zlapka</groupId>
-	<artifactId>eventcomponent</artifactId>
+	<groupId>com.codecool.zlapka.eventcomponent</groupId>
+	<artifactId>EventComponent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>GamLib</name>
+	<name>Zlapka-event</name>
 	<description>important component of final "Zlapka" project for Codecool</description>
 
 	<properties>
@@ -19,6 +19,13 @@
 	</properties>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
