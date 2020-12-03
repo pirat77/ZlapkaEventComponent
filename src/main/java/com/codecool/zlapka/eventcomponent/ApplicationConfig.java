@@ -1,8 +1,7 @@
 package com.codecool.zlapka.eventcomponent;
 
-import com.codecool.zlapka.eventcomponent.model.Event;
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
-import com.codecool.zlapka.eventcomponent.services.EventRepositoryParser;
+import com.codecool.zlapka.eventcomponent.services.EventService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
@@ -49,9 +48,9 @@ class ApplicationConfig {
     }
 
     @Bean
-    public EventRepositoryParser platformService(BeanFactory beanFactory) {
+    public EventService platformService(BeanFactory beanFactory) {
         ObjectProvider<EventRepository> beanProvider = beanFactory.getBeanProvider(EventRepository.class);
-        return new EventRepositoryParser(beanProvider.getIfAvailable());
+        return new EventService(beanProvider.getIfAvailable());
     }
 
    

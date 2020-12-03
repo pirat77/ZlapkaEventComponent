@@ -1,24 +1,24 @@
 package com.codecool.zlapka.eventcomponent.services;
 
-import com.codecool.zlapka.eventcomponent.model.Category;
 import com.codecool.zlapka.eventcomponent.model.Event;
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 
-public class EventRepositoryParser {
+public class EventService {
 
     @Autowired
     private JsonMapper jsonMapper;
     private EventRepository repository;
 
-    public EventRepositoryParser(EventRepository repository) {
+    public EventService(EventRepository repository) {
         this.repository = repository;
     }
 
     public Optional<Event> add(String jsonElement) {
         Optional<Event> optional = jsonMapper.getObjectFromJson(jsonElement);
         if (optional.isEmpty()) return optional;
+        // TODO: send bind request to localization service
         return Optional.of(repository.save(optional.get()));
     }
 
@@ -28,7 +28,7 @@ public class EventRepositoryParser {
 
     public long replace(String string){
         Optional<Event> newEvent = jsonMapper.getObjectFromJson(string);
-        if (newEvent.isPresent()) delete(Long.valueOf(newEvent.get().getId()));
+        newEvent.ifPresent(event -> delete(Long.valueOf(event.getId())));
         if (repository.save(newEvent.get()).equals(newEvent.get())) return 1;
         return -1;
     }

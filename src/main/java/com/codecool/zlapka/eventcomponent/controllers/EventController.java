@@ -1,6 +1,6 @@
 package com.codecool.zlapka.eventcomponent.controllers;
 
-import com.codecool.zlapka.eventcomponent.services.EventRepositoryParser;
+import com.codecool.zlapka.eventcomponent.services.EventService;
 import com.codecool.zlapka.eventcomponent.services.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ public abstract class EventController {
     private final String path = "/event";
 
     @Autowired
-    private EventRepositoryParser service;
+    private EventService service;
     @Autowired
     private StatusService statusService;
 
