@@ -1,5 +1,6 @@
 package com.codecool.zlapka.eventcomponent.services;
 
+import com.codecool.zlapka.eventcomponent.model.Event;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,10 @@ public class JsonMapper {
         return outputBuilder.toString();
     }
 
-    public <T> Optional<T> getObjectFromJson(String json, Class<T> objectClass) {
-        Optional<T> optionalInstance = Optional.empty();
+    public Optional<Event> getObjectFromJson(String json) {
+        Optional<Event> optionalInstance = Optional.empty();
         try {
-            T newInstance = mapper.readValue(json, objectClass);
+            Event newInstance = mapper.readValue(json, Event.class);
             optionalInstance = Optional.of(newInstance);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -47,8 +48,8 @@ public class JsonMapper {
         return optionalInstance;
     }
 
-    public <T> List<T> getListOfObjectsFromJson(String jsonObjectList, Class<T> objectClass) {
-        String[] path = objectClass.getName().split(".");
+    public List<Event> getListOfObjectsFromJson(String jsonObjectList) {
+        String[] path = Event.class.getName().split(".");
         String objectName = path[path.length -1];
         if (!jsonObjectList.startsWith(String.format("{\"%ss\":[", objectName))) return Collections.emptyList();
         String jsonObjectsInString = jsonObjectList.split("\\[", 1)[1].split("]")[0];
@@ -56,9 +57,9 @@ public class JsonMapper {
         if (jsonObjects[jsonObjects.length - 1].length() == 0) {
             jsonObjects = Arrays.copyOfRange(jsonObjects, 0, jsonObjects.length - 1);
         }
-        List<T> resultObjects = new ArrayList<>();
+        List<Event> resultObjects = new ArrayList<>();
         for (String object : jsonObjects) {
-            getObjectFromJson(object, objectClass).ifPresent(resultObjects::add);
+            getObjectFromJson(object).ifPresent(resultObjects::add);
         }
         return resultObjects;
     }

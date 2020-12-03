@@ -49,9 +49,9 @@ class ApplicationConfig {
     }
 
     @Bean
-    public EventRepositoryParser<Event, EventRepository> platformService(BeanFactory beanFactory) {
+    public EventRepositoryParser platformService(BeanFactory beanFactory) {
         ObjectProvider<EventRepository> beanProvider = beanFactory.getBeanProvider(EventRepository.class);
-        return new EventRepositoryParser<Event, EventRepository>(Event.class, beanProvider.getIfAvailable());
+        return new EventRepositoryParser(beanProvider.getIfAvailable());
     }
 
    

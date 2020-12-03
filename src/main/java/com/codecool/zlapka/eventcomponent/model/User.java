@@ -11,13 +11,26 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private String id;
+    private long id;
+    private String nick;
+    @Column(name="id_string")
+    private String idString;
 
-    public void setId(String id) {
+    User(long id, String nick, String idString){
+        this.id=id;
+        this.nick=nick;
+        this.idString=idString;
+    }
+
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
+
+    public String getIdString() { return idString; }
+
+    public void setIdString(String idString) { this.idString = idString; }
 }

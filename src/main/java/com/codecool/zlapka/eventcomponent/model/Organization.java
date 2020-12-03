@@ -9,6 +9,8 @@ public class Organization {
     @Column(name ="organization_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name="id_string")
+    private String idString;
 
     public void setId(Long id) {
         this.id = id;
