@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "location")
-public class Location extends ZlapkaEntityModel {
+public class Location {
 
 
     @Id

@@ -8,12 +8,12 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "event")
-public class Event extends ZlapkaEntityModel {
+public class Event {
 
     @Id
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String name;
     private String description;
     @Column(name = "max_participant")
@@ -43,17 +43,15 @@ public class Event extends ZlapkaEntityModel {
         super();
     }
 
-    @Override
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    @Override
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Event(Long id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, List<User> userList) {
+    public Event(String id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, List<User> userList) {
         this.id = id;
         this.name = name;
         this.description = description;

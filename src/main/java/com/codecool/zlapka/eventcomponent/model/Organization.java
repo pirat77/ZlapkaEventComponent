@@ -3,7 +3,7 @@ package com.codecool.zlapka.eventcomponent.model;
 import javax.persistence.*;
 
 @Entity(name = "organization")
-public class Organization extends ZlapkaEntityModel{
+public class Organization {
 
     @Id
     @Column(name ="organization_id")

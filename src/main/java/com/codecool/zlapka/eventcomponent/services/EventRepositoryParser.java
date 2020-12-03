@@ -1,7 +1,6 @@
 package com.codecool.zlapka.eventcomponent.services;
 
 import com.codecool.zlapka.eventcomponent.model.Category;
-import com.codecool.zlapka.eventcomponent.model.ZlapkaEntityModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import java.lang.reflect.InvocationTargetException;
@@ -9,14 +8,14 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudRepository<T, Long>> {
+public class EventRepositoryParser<Event, S extends CrudRepository<Event, Long>> {
 
     @Autowired
     private JsonMapper jsonMapper;
-    private Class<T> tClass;
+    private Class<Event> tClass;
     private S repository;
 
-    public RepositoryParser(Class<T> tClass, S repository) {
+    public EventRepositoryParser(Class<Event> tClass, S repository) {
         this.tClass = tClass;
         this.repository = repository;
     }
@@ -28,8 +27,8 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
             return getAllByParams(parameters);
     }
 
-    public Optional<T> add(String jsonElement) {
-        Optional<T> optional = jsonMapper.getObjectFromJson(jsonElement, tClass);
+    public Optional<Event> add(String jsonElement) {
+        Optional<Event> optional = jsonMapper.getObjectFromJson(jsonElement, tClass);
         if (optional.isEmpty()) return optional;
         return Optional.of(repository.save(optional.get()));
     }
@@ -56,18 +55,18 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
     }
 
     private long deleteAllByParams(Map<String, String> parameters) {
-        List<T> elements = findCommonElements(parameters);
+        List<Event> elements = findCommonElements(parameters);
         if (elements.isEmpty()) return 0L;
         repository.deleteAll(elements);
         return elements.size();
     }
 
-    private <U> List<T> findCommonElements(Map<String, String> parameters) {
+    private <U> List<Event> findCommonElements(Map<String, String> parameters) {
         String methodPrefix = "findBy";
         List<Method> findByMethods = Arrays.stream(repository.getClass().getMethods())
                 .filter(method -> method.getName().startsWith(methodPrefix))
                 .collect(Collectors.toList());
-        Set<T> foundElements = new HashSet<>();
+        Set<Event> foundElements = new HashSet<>();
         boolean firstIteration = true;
         for(String paramName : parameters.keySet()) {
             Optional<Method> methodOptional = findByMethods.stream()
@@ -75,7 +74,7 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
                     .findFirst();
             if (methodOptional.isEmpty()) continue;
             String paramValue = parameters.get(paramName);
-            List<T> nextElements = getElementsFromMethod(paramValue, methodOptional.get());
+            List<Event> nextElements = getElementsFromMethod(paramValue, methodOptional.get());
             if (firstIteration) foundElements.addAll(nextElements);
             else foundElements.retainAll(nextElements);
             firstIteration = false;
@@ -83,7 +82,7 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
         return new ArrayList<>(foundElements);
     }
 
-    private <U> List<T> getElementsFromMethod(String paramValue, Method method) {
+    private <U> List<Event> getElementsFromMethod(String paramValue, Method method) {
         U parameterValue;
         if (Arrays.stream(method.getGenericParameterTypes()).findAny().get().equals(Category.class))
             parameterValue = castParameterFromGivenClass(Category.valueOf(paramValue), method);
@@ -94,7 +93,7 @@ public class RepositoryParser<T extends ZlapkaEntityModel, S extends CrudReposit
         try {
             Object returnedObject = method.invoke(repository, parameterValue);
             returnedObject = insertObjectIntoListIfItIsOptional(returnedObject);
-            return (List<T>) returnedObject;
+            return (List<Event>) returnedObject;
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
