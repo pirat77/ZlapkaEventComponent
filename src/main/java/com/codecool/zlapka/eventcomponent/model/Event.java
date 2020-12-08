@@ -11,13 +11,15 @@ import java.util.List;
 public class Event {
 
     @Id
-    @Column(name = "event_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
+    @Column(name = "id_string")
+    private String idString;
     private String name;
     private String description;
     @Column(name = "max_participant")
-    int maxParticipant;
+    private int maxParticipant;
     private Date date;
     private Time time;
     private int duration;
@@ -27,15 +29,15 @@ public class Event {
     @Enumerated(EnumType.STRING)
     @Column(name = "category_id")
     private Category category;
-
     @ManyToOne
-    @JoinColumn(name="location_id", referencedColumnName = "location_id")
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
-
     @ManyToOne
-    @JoinColumn(name="organization_id", referencedColumnName = "organization_id")
+    @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private Organization organization;
-
+    @ManyToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    private User owner;
     @ManyToMany
     private List<User> userList;
 
@@ -43,16 +45,9 @@ public class Event {
         super();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public Event(long id, String idString, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, User owner, List<User> userList) {
         this.id = id;
-    }
-
-    public Event(String id, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, List<User> userList) {
-        this.id = id;
+        this.idString = idString;
         this.name = name;
         this.description = description;
         this.maxParticipant = maxParticipant;
@@ -64,7 +59,24 @@ public class Event {
         this.category = category;
         this.location = location;
         this.organization = organization;
+        this.owner = owner;
         this.userList = userList;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getIdString() {
+        return idString;
+    }
+
+    public void setIdString(String idString) {
+        this.idString = idString;
     }
 
     public String getName() {
@@ -153,6 +165,14 @@ public class Event {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public List<User> getUserList() {

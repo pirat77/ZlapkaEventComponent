@@ -14,7 +14,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -48,11 +47,8 @@ class ApplicationConfig {
     }
 
     @Bean
-    public EventService platformService(BeanFactory beanFactory) {
+    public EventService eventService(BeanFactory beanFactory) {
         ObjectProvider<EventRepository> beanProvider = beanFactory.getBeanProvider(EventRepository.class);
         return new EventService(beanProvider.getIfAvailable());
     }
-
-   
-
 }
