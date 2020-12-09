@@ -10,8 +10,12 @@ import java.util.List;
 @Repository
 public interface EventRepository extends CrudRepository<Event, Long> {
 
+    @Query("select e from event e where e.idString = :idString")
+    List<Event> findByStringId(@Param("idString") String idString);
     @Query("select e from event e where e.name = :name")
     List<Event> findByName(@Param("name") String name);
     @Query("select e from event e where e.category = :category")
     List<Event> findByCategory(@Param("category") String category);
+    @Query("select e from event e where e.location.idString = :locationId")
+    List<Event> findEventsByLocationId(@Param("locationId") String locationId);
 }

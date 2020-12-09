@@ -1,6 +1,7 @@
 package com.codecool.zlapka.eventcomponent.services;
 
 import com.codecool.zlapka.eventcomponent.model.Event;
+import com.codecool.zlapka.eventcomponent.model.Location;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class JsonMapper {
         return outputBuilder.toString();
     }
 
-    public Optional<Event> getObjectFromJson(String json) {
+    public Optional<Event> getEventFromJson(String json) {
         Optional<Event> optionalInstance = Optional.empty();
         try {
             Event newInstance = mapper.readValue(json, Event.class);
@@ -48,7 +49,18 @@ public class JsonMapper {
         return optionalInstance;
     }
 
-    public List<Event> getListOfObjectsFromJson(String jsonObjectList) {
+    public Optional<Location> getLocationFromJson(String json) {
+        Optional<Location> optionalInstance = Optional.empty();
+        try {
+            Location newInstance = mapper.readValue(json, Location.class);
+            optionalInstance = Optional.of(newInstance);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return optionalInstance;
+    }
+
+    public List<Event> getListOfEventsFromJson(String jsonObjectList) {
         String[] path = Event.class.getName().split(".");
         String objectName = path[path.length -1];
         if (!jsonObjectList.startsWith(String.format("{\"%ss\":[", objectName))) return Collections.emptyList();
@@ -59,7 +71,7 @@ public class JsonMapper {
         }
         List<Event> resultObjects = new ArrayList<>();
         for (String object : jsonObjects) {
-            getObjectFromJson(object).ifPresent(resultObjects::add);
+            getEventFromJson(object).ifPresent(resultObjects::add);
         }
         return resultObjects;
     }

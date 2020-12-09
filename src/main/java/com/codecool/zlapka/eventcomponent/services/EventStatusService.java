@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class StatusService {
+public class EventStatusService {
 
     @Autowired
     private JsonMapper jsonMapper;

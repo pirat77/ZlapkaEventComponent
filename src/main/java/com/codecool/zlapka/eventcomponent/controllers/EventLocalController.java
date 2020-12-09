@@ -1,7 +1,8 @@
 package com.codecool.zlapka.eventcomponent.controllers;
 
 import com.codecool.zlapka.eventcomponent.services.EventService;
-import com.codecool.zlapka.eventcomponent.services.StatusService;
+import com.codecool.zlapka.eventcomponent.services.LocationService;
+import com.codecool.zlapka.eventcomponent.services.LocationStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,30 +12,26 @@ public class EventLocalController {
     private final String path = "/event/localization";
 
     @Autowired
-    private EventService service;
+    private LocationService locationService;
     @Autowired
-    private StatusService statusService;
+    private EventService eventService;
+    @Autowired
+    private LocationStatusService locationStatusService;
 
-//    @GetMapping(value = path)
-//    public String getEvent(@RequestParam(required = false) long id) {
-//        String event = service.getById(id);
-//        if (event.equals("{}")) return statusService.statusAfterGetElementsNotFound(path);
-//        return event;
-//    }
-
-    @DeleteMapping(value = path)
-    public String deleteEvent(@RequestParam(required = false) Long id){
-        return statusService.statusAfterDelete(path, service.delete(id));
+    @GetMapping(value = path)
+    public String getLocation(@RequestParam(required = false) String locationId) {
+        String event = eventService.getEventsByLocationId(locationId);
+        if (event.equals("{}")) return locationStatusService.statusAfterGetElementsNotFound(path);
+        return event;
     }
 
     @PutMapping(value = path)
     public String putEvent(@RequestBody String event){
-        return statusService.statusAfterReplace(path, service.replace(event));
+        return locationStatusService.statusAfterReplace(path, locationService.replace(event));
     }
 
     @PostMapping(value = path)
     public String postEvent(@RequestBody String jsonObject){
-        return statusService.statusAfterAdd(path, service.add(jsonObject));
+        return locationStatusService.statusAfterAdd(path, locationService.add(jsonObject));
     }
-
 }

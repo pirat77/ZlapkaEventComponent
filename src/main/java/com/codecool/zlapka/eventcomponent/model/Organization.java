@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="id_string")
     private String idString;

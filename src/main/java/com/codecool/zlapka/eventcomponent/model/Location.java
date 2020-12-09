@@ -10,8 +10,9 @@ public class Location {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "id_string")
     private String idString;
     private String name;
 
