@@ -29,23 +29,20 @@ public class Event {
     @Enumerated(EnumType.STRING)
     @Column(name = "category_id")
     private Category category;
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
-    private Location location;
-    @ManyToOne
-    @JoinColumn(name = "organization_id", referencedColumnName = "id")
-    private Organization organization;
-    @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
-    private User owner;
-    @ManyToMany
-    private List<User> userList;
+    @Column(name = "location_id")
+    private String locationId;
+    @Column(name = "organization_id")
+    private String organizationId;
+    @Column(name = "owner_id")
+    private String ownerId;
+    @ElementCollection
+    private List<String> users;
 
-    public Event(){
+    public Event() {
         super();
     }
 
-    public Event(long id, String idString, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, Location location, Organization organization, User owner, List<User> userList) {
+    public Event(long id, String idString, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, String locationId, String organizationId, String ownerId, List<String> users) {
         this.id = id;
         this.idString = idString;
         this.name = name;
@@ -57,10 +54,10 @@ public class Event {
         this.publicEvent = publicEvent;
         this.archived = archived;
         this.category = category;
-        this.location = location;
-        this.organization = organization;
-        this.owner = owner;
-        this.userList = userList;
+        this.locationId = locationId;
+        this.organizationId = organizationId;
+        this.ownerId = ownerId;
+        this.users = users;
     }
 
     public long getId() {
@@ -151,35 +148,35 @@ public class Event {
         this.category = category;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
-    public Organization getOrganization() {
-        return organization;
+    public String getOrganizationId() {
+        return organizationId;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
 
-    public User getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public List<String> getUsers() {
+        return users;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setUsers(List<String> users) {
+        this.users = users;
     }
 }

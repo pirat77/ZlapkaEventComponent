@@ -1,9 +1,7 @@
 package com.codecool.zlapka.eventcomponent;
 
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
-import com.codecool.zlapka.eventcomponent.repositories.LocationRepository;
 import com.codecool.zlapka.eventcomponent.services.EventService;
-import com.codecool.zlapka.eventcomponent.services.LocationService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
@@ -54,9 +52,5 @@ class ApplicationConfig {
         return new EventService(beanProvider.getIfAvailable());
     }
 
-    @Bean
-    public LocationService locationService(BeanFactory beanFactory) {
-        ObjectProvider<LocationRepository> beanProvider = beanFactory.getBeanProvider(LocationRepository.class);
-        return new LocationService(beanProvider.getIfAvailable());
-    }
+
 }

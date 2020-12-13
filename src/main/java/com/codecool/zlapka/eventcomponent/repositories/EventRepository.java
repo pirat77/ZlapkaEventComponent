@@ -16,6 +16,6 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     List<Event> findByName(@Param("name") String name);
     @Query("select e from event e where e.category = :category")
     List<Event> findByCategory(@Param("category") String category);
-    @Query("select e from event e where e.location.idString = :locationId")
+    @Query("select e from event e where e.locationId = :locationId")
     List<Event> findEventsByLocationId(@Param("locationId") String locationId);
 }

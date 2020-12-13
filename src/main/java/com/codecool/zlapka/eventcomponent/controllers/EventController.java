@@ -16,7 +16,9 @@ public class EventController {
     private EventStatusService eventStatusService;
 
     @GetMapping(value = path)
-    public String getEvent(@RequestParam(required = false) String idString) {
+    public String getEvent(@RequestParam(required = false) String idString,
+                           @RequestParam(required = false) String userId,
+                           @RequestParam(required = false) String locationId) {
         String event = eventService.getByStringId(idString);
         if (event.equals("{}")) return eventStatusService.statusAfterGetElementsNotFound(path);
         return event;
