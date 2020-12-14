@@ -23,9 +23,9 @@ public class Event {
     private Date date;
     private Time time;
     private int duration;
-    @Column(name = "public_event")
-    private boolean publicEvent;
-    private boolean archived;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_status")
+    private  EventStatus eventStatus;
     @Enumerated(EnumType.STRING)
     @Column(name = "category_id")
     private Category category;
@@ -40,24 +40,6 @@ public class Event {
 
     public Event() {
         super();
-    }
-
-    public Event(long id, String idString, String name, String description, int maxParticipant, Date date, Time time, int duration, boolean publicEvent, boolean archived, Category category, String locationId, String organizationId, String ownerId, List<String> users) {
-        this.id = id;
-        this.idString = idString;
-        this.name = name;
-        this.description = description;
-        this.maxParticipant = maxParticipant;
-        this.date = date;
-        this.time = time;
-        this.duration = duration;
-        this.publicEvent = publicEvent;
-        this.archived = archived;
-        this.category = category;
-        this.locationId = locationId;
-        this.organizationId = organizationId;
-        this.ownerId = ownerId;
-        this.users = users;
     }
 
     public long getId() {
@@ -124,20 +106,12 @@ public class Event {
         this.duration = duration;
     }
 
-    public boolean isPublicEvent() {
-        return publicEvent;
+    public EventStatus getEventStatus() {
+        return eventStatus;
     }
 
-    public void setPublicEvent(boolean publicEvent) {
-        this.publicEvent = publicEvent;
-    }
-
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public void setArchived(boolean archived) {
-        this.archived = archived;
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
     public Category getCategory() {
@@ -177,6 +151,23 @@ public class Event {
     }
 
     public void setUsers(List<String> users) {
+        this.users = users;
+    }
+
+    public Event(long id, String idString, String name, String description, int maxParticipant, Date date, Time time, int duration, EventStatus eventStatus, Category category, String locationId, String organizationId, String ownerId, List<String> users) {
+        this.id = id;
+        this.idString = idString;
+        this.name = name;
+        this.description = description;
+        this.maxParticipant = maxParticipant;
+        this.date = date;
+        this.time = time;
+        this.duration = duration;
+        this.eventStatus = eventStatus;
+        this.category = category;
+        this.locationId = locationId;
+        this.organizationId = organizationId;
+        this.ownerId = ownerId;
         this.users = users;
     }
 }
