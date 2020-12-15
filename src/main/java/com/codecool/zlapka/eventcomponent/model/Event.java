@@ -2,7 +2,6 @@ package com.codecool.zlapka.eventcomponent.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
-import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class Event {
     @Column(name = "max_participant")
     private int maxParticipant;
     private Date date;
-    private Time time;
+    private Date time;
     private int duration;
     @Enumerated(EnumType.STRING)
     @Column(name = "event_status")
@@ -38,16 +37,28 @@ public class Event {
     @ElementCollection
     private List<String> users;
 
-    public Event() {
-        super();
-    }
-
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Event() {
+        super();
+    }
+
+    public Event(String idString, String name, String description, int maxParticipant, Date date, Date time, int duration, EventStatus eventStatus, Category category, String locationId, String organizationId, String ownerId, List<String> users) {
+        this.idString = idString;
+        this.name = name;
+        this.description = description;
+        this.maxParticipant = maxParticipant;
+        this.date = date;
+        this.time = time;
+        this.duration = duration;
+        this.eventStatus = eventStatus;
+        this.category = category;
+        this.locationId = locationId;
+        this.organizationId = organizationId;
+        this.ownerId = ownerId;
+        this.users = users;
     }
 
     public String getIdString() {
@@ -90,11 +101,11 @@ public class Event {
         this.date = date;
     }
 
-    public Time getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
@@ -151,23 +162,6 @@ public class Event {
     }
 
     public void setUsers(List<String> users) {
-        this.users = users;
-    }
-
-    public Event(long id, String idString, String name, String description, int maxParticipant, Date date, Time time, int duration, EventStatus eventStatus, Category category, String locationId, String organizationId, String ownerId, List<String> users) {
-        this.id = id;
-        this.idString = idString;
-        this.name = name;
-        this.description = description;
-        this.maxParticipant = maxParticipant;
-        this.date = date;
-        this.time = time;
-        this.duration = duration;
-        this.eventStatus = eventStatus;
-        this.category = category;
-        this.locationId = locationId;
-        this.organizationId = organizationId;
-        this.ownerId = ownerId;
         this.users = users;
     }
 }

@@ -1,0 +1,1 @@
+insert into event (id, id_string, max_participant, )

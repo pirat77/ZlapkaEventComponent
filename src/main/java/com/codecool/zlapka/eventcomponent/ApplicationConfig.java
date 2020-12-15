@@ -51,6 +51,4 @@ class ApplicationConfig {
         ObjectProvider<EventRepository> beanProvider = beanFactory.getBeanProvider(EventRepository.class);
         return new EventService(beanProvider.getIfAvailable());
     }
-
-
 }

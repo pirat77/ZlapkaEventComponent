@@ -1,15 +1,26 @@
 package com.codecool.zlapka.eventcomponent.services;
 
+import com.codecool.zlapka.eventcomponent.Networking.ConnectionProvider;
+import com.codecool.zlapka.eventcomponent.Networking.EventBond;
 import com.codecool.zlapka.eventcomponent.model.Category;
 import com.codecool.zlapka.eventcomponent.model.Event;
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class EventService {
 
     @Autowired
     private JsonMapper jsonMapper;
+    @Autowired
+    private ConnectionProvider connectionProvider;
     private EventRepository eventRepository;
 
     public EventService(EventRepository eventRepository) {
@@ -18,9 +29,53 @@ public class EventService {
 
     public Optional<Event> add(String jsonElement) {
         Optional<Event> optional = jsonMapper.getEventFromJson(jsonElement);
+
         if (optional.isEmpty()) return optional;
-        // TODO: send bind request to localization service
-        return Optional.of(eventRepository.save(optional.get()));
+        EventBond eventBond = new EventBond(optional.get().getLocationId(), optional.get().getIdString());
+        System.out.println(eventBond.toJson());
+        if (bindToLocalization(eventBond)){
+            System.out.println("Bond done!");
+            return Optional.of(eventRepository.save(optional.get()));
+
+        }
+        System.out.println("bond failled!");
+        return Optional.ofNullable(null);
+        // TODO: clean this
+    }
+
+    public boolean bindToLocalization(EventBond eventBond) {
+        try {
+            byte[] requestBody = eventBond.toJson().getBytes(StandardCharsets.UTF_8);
+            HttpURLConnection connection = connectionProvider.localizationBondConnection();
+            connection.setRequestMethod("POST");
+            System.out.println(connection.getRequestMethod()); // test log
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Length", String.valueOf(requestBody.length));
+            connection.setConnectTimeout(10000);
+            connection.setDoOutput(true);
+            System.out.println(connection.toString()); //test log
+            DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
+            System.out.println(writer.toString()); //test log
+            writer.write(requestBody);
+            writer.flush();
+            writer.close();
+            StringBuilder content;
+            try (BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()))) {
+                String line;
+                content = new StringBuilder();
+                while ((line = in.readLine()) != null) {
+                    content.append(line);
+                    content.append(System.lineSeparator());
+                }
+            }
+            System.out.println(content.toString());
+            connection.disconnect();
+                return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public String getByStringId(String stringId){

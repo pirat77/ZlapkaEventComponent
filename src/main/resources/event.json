@@ -1,0 +1,17 @@
+{
+  "idString": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "name": "Party",
+  "descrtipion": "would be a lot of fun",
+  "maxParticipant": 0,
+  "date": "2020-12-12",
+  "time": "2020-12-12",
+  "duration": 0,
+  "eventStatus": "PRIVATE",
+  "category": "CASUAL",
+  "locationId": "3e279271-f02e-48be-9309-277e6f51f987",
+  "organizationId": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "ownerId": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "users": [
+    "d290f1ee-6c54-4b01-90e6-d701748f0851"
+  ]
+}
