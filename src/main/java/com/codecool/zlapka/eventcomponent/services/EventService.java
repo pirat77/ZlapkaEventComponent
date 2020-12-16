@@ -2,15 +2,12 @@ package com.codecool.zlapka.eventcomponent.services;
 
 import com.codecool.zlapka.eventcomponent.Networking.ConnectionProvider;
 import com.codecool.zlapka.eventcomponent.Networking.EventBond;
+import com.codecool.zlapka.eventcomponent.Networking.OwnerBond;
 import com.codecool.zlapka.eventcomponent.model.Category;
 import com.codecool.zlapka.eventcomponent.model.Event;
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -29,49 +26,39 @@ public class EventService {
 
     public Optional<Event> add(String jsonElement) {
         Optional<Event> optional = jsonMapper.getEventFromJson(jsonElement);
-
         if (optional.isEmpty()) return optional;
-        EventBond eventBond = new EventBond(optional.get().getLocationId(), optional.get().getIdString());
+        EventBond eventBond = new EventBond(optional.get().getLocationId(),
+                                            optional.get().getIdString());
+        OwnerBond ownerBond = new OwnerBond(optional.get().getIdString(),
+                                            optional.get().getOwnerId(),
+                                            optional.get().getName());
         System.out.println(eventBond.toJson());
-        if (bindToLocalization(eventBond)){
+        System.out.println(ownerBond.toJson());
+        if (bindToLocalization(eventBond) && bindToOwner(ownerBond)){
             System.out.println("Bond done!");
             return Optional.of(eventRepository.save(optional.get()));
-
         }
         System.out.println("bond failled!");
         return Optional.ofNullable(null);
         // TODO: clean this
     }
 
+    public boolean bindToOwner(OwnerBond ownerBond){
+        try {
+            HttpURLConnection connection = connectionProvider.ownerBondConnection(ownerBond.getOwnerId(), "add");
+            byte[] requestBody = ownerBond.toJson().getBytes(StandardCharsets.UTF_8);
+            if (connectionProvider.postRequest(requestBody, connection)) return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean bindToLocalization(EventBond eventBond) {
         try {
-            byte[] requestBody = eventBond.toJson().getBytes(StandardCharsets.UTF_8);
             HttpURLConnection connection = connectionProvider.localizationBondConnection();
-            connection.setRequestMethod("POST");
-            System.out.println(connection.getRequestMethod()); // test log
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Content-Length", String.valueOf(requestBody.length));
-            connection.setConnectTimeout(10000);
-            connection.setDoOutput(true);
-            System.out.println(connection.toString()); //test log
-            DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
-            System.out.println(writer.toString()); //test log
-            writer.write(requestBody);
-            writer.flush();
-            writer.close();
-            StringBuilder content;
-            try (BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()))) {
-                String line;
-                content = new StringBuilder();
-                while ((line = in.readLine()) != null) {
-                    content.append(line);
-                    content.append(System.lineSeparator());
-                }
-            }
-            System.out.println(content.toString());
-            connection.disconnect();
-                return true;
+            byte[] requestBody = eventBond.toJson().getBytes(StandardCharsets.UTF_8);
+            if (connectionProvider.postRequest(requestBody, connection)) return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
