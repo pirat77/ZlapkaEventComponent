@@ -27,17 +27,14 @@ public class ConnectionProvider {
         return (HttpURLConnection) locationBondURL.openConnection();
     }
 
-    public boolean postRequest(byte[] requestBody, HttpURLConnection connection){
+    public boolean sendRequest(byte[] requestBody, HttpURLConnection connection, String requestMethod){
         try {
-            connection.setRequestMethod("POST");
-            System.out.println(connection.getRequestMethod()); // test log
+            connection.setRequestMethod(requestMethod);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Content-Length", String.valueOf(requestBody.length));
             connection.setConnectTimeout(10000);
             connection.setDoOutput(true);
-            System.out.println(connection.toString()); //test log
             DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
-            System.out.println(writer.toString()); //test log
             writer.write(requestBody);
             writer.flush();
             writer.close();
@@ -55,7 +52,7 @@ public class ConnectionProvider {
             connection.disconnect();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Request failed.");;
         }
         return false;
     }

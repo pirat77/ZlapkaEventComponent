@@ -1,15 +1,9 @@
 package com.codecool.zlapka.eventcomponent.services;
 
-import com.codecool.zlapka.eventcomponent.Networking.ConnectionProvider;
-import com.codecool.zlapka.eventcomponent.Networking.EventBond;
-import com.codecool.zlapka.eventcomponent.Networking.OwnerBond;
-import com.codecool.zlapka.eventcomponent.model.Category;
+import com.codecool.zlapka.eventcomponent.Networking.*;
 import com.codecool.zlapka.eventcomponent.model.Event;
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class EventService {
@@ -17,7 +11,7 @@ public class EventService {
     @Autowired
     private JsonMapper jsonMapper;
     @Autowired
-    private ConnectionProvider connectionProvider;
+    private ApiCommands ApiCommands;
     private EventRepository eventRepository;
 
     public EventService(EventRepository eventRepository) {
@@ -27,67 +21,51 @@ public class EventService {
     public Optional<Event> add(String jsonElement) {
         Optional<Event> optional = jsonMapper.getEventFromJson(jsonElement);
         if (optional.isEmpty()) return optional;
-        EventBond eventBond = new EventBond(optional.get().getLocationId(),
-                                            optional.get().getIdString());
-        OwnerBond ownerBond = new OwnerBond(optional.get().getIdString(),
-                                            optional.get().getOwnerId(),
-                                            optional.get().getName());
-        System.out.println(eventBond.toJson());
-        System.out.println(ownerBond.toJson());
-        if (bindToLocalization(eventBond) && bindToOwner(ownerBond)){
+        if (menageBonds(optional.get(), Action.POST)){
             System.out.println("Bond done!");
             return Optional.of(eventRepository.save(optional.get()));
         }
-        System.out.println("bond failled!");
+        System.out.println("Bond failed!");
         return Optional.ofNullable(null);
-        // TODO: clean this
     }
 
-    public boolean bindToOwner(OwnerBond ownerBond){
-        try {
-            HttpURLConnection connection = connectionProvider.ownerBondConnection(ownerBond.getOwnerId(), "add");
-            byte[] requestBody = ownerBond.toJson().getBytes(StandardCharsets.UTF_8);
-            if (connectionProvider.postRequest(requestBody, connection)) return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private boolean menageBonds(Event event, Action action){
+        EventBond eventBond = new EventBond(event.getLocationId(),
+                                            event.getIdString());
+        OwnerBond ownerBond = new OwnerBond(event.getIdString(),
+                                            event.getOwnerId(),
+                                            event.getName());
+        System.out.println(eventBond.toJson());
+        System.out.println(ownerBond.toJson());
+        return ApiCommands.bindToLocalization(eventBond, action) && ApiCommands.bindToOwner(ownerBond, action);
+    }
+
+    public String getByStringId(String UUID){
+        return jsonMapper.jsonRepresentation(eventRepository.findById(UUID));
+    }
+
+    public boolean enrollToEvent(){
+       return false;
+    }
+
+    public boolean optOutFromEvent(){
         return false;
-    }
-
-    public boolean bindToLocalization(EventBond eventBond) {
-        try {
-            HttpURLConnection connection = connectionProvider.localizationBondConnection();
-            byte[] requestBody = eventBond.toJson().getBytes(StandardCharsets.UTF_8);
-            if (connectionProvider.postRequest(requestBody, connection)) return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public String getByStringId(String stringId){
-        return jsonMapper.jsonRepresentation(eventRepository.findByStringId(stringId));
-    }
-
-    public String getEventsByLocationId(String locationId) {
-        return jsonMapper.jsonRepresentation(eventRepository.findEventsByLocationId(locationId));
     }
 
     public long replace(String string){
         Optional<Event> newEvent = jsonMapper.getEventFromJson(string);
-        newEvent.ifPresent(event -> delete(event.getId()));
-        if (eventRepository.save(newEvent.get()).equals(newEvent.get())) return 1;
+        newEvent.ifPresent(event -> delete(event.getIdString()));
+        if (eventRepository.save(newEvent.get()).equals(newEvent.get()) && menageBonds(newEvent.get(), Action.POST))
+            return 1;
         return -1;
     }
 
-    public long delete(Long id){
-        // TODO: send unbind request to localization service
-        eventRepository.deleteById(id);
+    public long delete(String UUID){
+        Optional<Event> oldEvent = eventRepository.findById(UUID);
+        if (oldEvent.isEmpty()) return -1;
+        eventRepository.deleteById(UUID);
+        menageBonds(oldEvent.get(), Action.DELETE);
         return 1;
-    }
-
-    public String getByCategory(Category category){
-        return jsonMapper.jsonRepresentation(eventRepository.findByCategory(category.getName()));
     }
 
     public String getAll(){

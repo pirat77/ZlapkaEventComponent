@@ -1,7 +1,5 @@
 package com.codecool.zlapka.eventcomponent.controllers;
 
-import com.codecool.zlapka.eventcomponent.Networking.EventBond;
-import com.codecool.zlapka.eventcomponent.Security.UUIDprovider;
 import com.codecool.zlapka.eventcomponent.services.EventService;
 import com.codecool.zlapka.eventcomponent.services.EventStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
 
     private final String path = "/event";
-    private final String eventBondPath = "/event/bond";
     private final String userPath = "/event/bond/user";
 
     @Autowired
@@ -20,25 +17,14 @@ public class EventController {
     private EventStatusService eventStatusService;
 
     @GetMapping(value = path)
-    public String getEvent(@RequestParam(required = false) String idString,
-                           @RequestParam(required = false) String userId,
-                           @RequestParam(required = false) String locationId) {
-        String event = eventService.getByStringId(idString);
-        if (event.equals("{}")) return eventStatusService.statusAfterGetElementsNotFound(path);
+    public String getEvent(@RequestParam(required = false) String UUID) {
+        String event = eventService.getByStringId(UUID);
+        if (event.equals("{}")) return eventService.getAll();
         return event;
     }
 
-    @PostMapping(value = eventBondPath)
-    public String bondEvent(){
-        eventService.bindToLocalization(new EventBond("3e279271-f02e-48be-9309-277e6f51f987",
-                UUIDprovider.generateType1UUID().toString()
-        ));
-        //TODO: handle edge cases
-        return "done";
-    }
-
     @DeleteMapping(value = path)
-    public String deleteEvent(@RequestParam(required = true) Long id){
+    public String deleteEvent(@RequestParam(required = true) String id){
         return eventStatusService.statusAfterDelete(path, eventService.delete(id));
     }
 
@@ -58,4 +44,9 @@ public class EventController {
         return "do this";
     }
 
+    @DeleteMapping(value = userPath)
+    public String removeUser(@RequestBody String userFromEvent){
+        //TODO: implement this;
+        return "do this";
+    }
 }

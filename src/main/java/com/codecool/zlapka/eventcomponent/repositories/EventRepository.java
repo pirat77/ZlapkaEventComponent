@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EventRepository extends CrudRepository<Event, Long> {
+public interface EventRepository extends CrudRepository<Event, String> {
 
     @Query("select e from event e where e.idString = :idString")
     List<Event> findByStringId(@Param("idString") String idString);

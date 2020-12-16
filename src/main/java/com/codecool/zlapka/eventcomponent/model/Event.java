@@ -10,9 +10,6 @@ import java.util.List;
 public class Event {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     @Column(name = "id_string")
     private String idString;
     private String name;
@@ -36,10 +33,6 @@ public class Event {
     private String ownerId;
     @ElementCollection
     private List<String> users;
-
-    public long getId() {
-        return id;
-    }
 
     public Event() {
         super();
