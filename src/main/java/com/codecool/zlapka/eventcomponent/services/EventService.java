@@ -28,8 +28,7 @@ public class EventService {
             return Optional.of(eventRepository.save(optional.get()));
         }
         System.out.println("Bond failed!");
-        return Optional.of(eventRepository.save(optional.get()));
-        //return Optional.ofNullable(null);
+        return Optional.ofNullable(null);
     }
 
     private boolean menageBonds(Event event, Action action){
