@@ -13,7 +13,7 @@ import java.net.URL;
 @Service
 public class ConnectionProvider {
     private final URL googleURL = new URL("http://google.com");
-    private final URL locationBondURL = new URL("http://5.135.20.171:34225/localization/bond/event");
+    private final URL locationBondURL = new URL("http://10.245.154.132:34225/localization/bond/event");
     private String userPATH = "http://5.135.20.171:44387/userapi/users/";
 
     public ConnectionProvider() throws IOException { }
