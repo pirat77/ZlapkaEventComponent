@@ -1,6 +1,6 @@
 {
   "idString": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "name": "Party",
+  "name": "Frontenddev",
   "description": "would be a lot of fun",
   "maxParticipant": 30,
   "date": "2020-12-12",
@@ -8,9 +8,9 @@
   "duration": 2,
   "eventStatus": "PRIVATE",
   "category": "CASUAL",
-  "locationId": "3e279271-f02e-48be-9309-277e6f51f987",
+  "locationId": "826e5b1e-384c-4cbd-b5f1-0238f5d3b3bb",
   "organizationId": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "ownerId": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "ownerId": "3d280c89-0825-4196-b11a-d13131ce107f",
   "users": [
     "d290f1ee-6c54-4b01-90e6-d701748f0851"
   ]

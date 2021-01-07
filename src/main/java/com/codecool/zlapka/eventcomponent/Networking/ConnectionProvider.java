@@ -14,12 +14,12 @@ import java.net.URL;
 public class ConnectionProvider {
     private final URL googleURL = new URL("http://google.com");
     private final URL locationBondURL = new URL("http://5.135.20.171:34225/localization/bond/event");
-    private String userPATH = "http://5.135.20.171:8080/userAPI/users/";
+    private String userPATH = "http://5.135.20.171:44387/userapi/users/";
 
     public ConnectionProvider() throws IOException { }
 
     public HttpURLConnection ownerBondConnection(String UUID, String action) throws IOException {
-        URL userURL = new URL(userPATH + UUID + "/events/" + action);
+        URL userURL = new URL(userPATH + "userId/events/" + action + "?userid=" + UUID );
         return (HttpURLConnection) userURL.openConnection();
     }
 

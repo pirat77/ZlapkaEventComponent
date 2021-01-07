@@ -18,6 +18,7 @@ public class EventController {
 
     @GetMapping(value = path)
     public String getEvent(@RequestParam(required = false) String UUID) {
+        if (UUID == null) return eventService.getAll();
         String event = eventService.getByStringId(UUID);
         if (event.equals("{}")) return eventService.getAll();
         return event;

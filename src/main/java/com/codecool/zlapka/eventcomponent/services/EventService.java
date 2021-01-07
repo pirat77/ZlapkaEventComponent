@@ -1,6 +1,7 @@
 package com.codecool.zlapka.eventcomponent.services;
 
 import com.codecool.zlapka.eventcomponent.Networking.*;
+import com.codecool.zlapka.eventcomponent.Security.UUIDprovider;
 import com.codecool.zlapka.eventcomponent.model.Event;
 import com.codecool.zlapka.eventcomponent.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,14 @@ public class EventService {
     public Optional<Event> add(String jsonElement) {
         Optional<Event> optional = jsonMapper.getEventFromJson(jsonElement);
         if (optional.isEmpty()) return optional;
+        optional.get().setIdString(UUIDprovider.generateType1UUID().toString());
         if (menageBonds(optional.get(), Action.POST)){
             System.out.println("Bond done!");
             return Optional.of(eventRepository.save(optional.get()));
         }
         System.out.println("Bond failed!");
-        return Optional.ofNullable(null);
+        return Optional.of(eventRepository.save(optional.get()));
+        //return Optional.ofNullable(null);
     }
 
     private boolean menageBonds(Event event, Action action){
