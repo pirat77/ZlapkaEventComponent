@@ -13,7 +13,7 @@ public class EventService {
     private JsonMapper jsonMapper;
     @Autowired
     private ApiCommands ApiCommands;
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;

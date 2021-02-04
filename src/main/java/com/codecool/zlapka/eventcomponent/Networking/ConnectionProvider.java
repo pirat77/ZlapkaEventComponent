@@ -13,13 +13,13 @@ import java.net.URL;
 @Service
 public class ConnectionProvider {
     private final URL googleURL = new URL("http://google.com");
-    private final URL locationBondURL = new URL("http://10.245.154.132:34225/localization/bond/event");
-    private String userPATH = "http://5.135.20.171:44387/userapi/users/";
+    private final URL locationBondURL = new URL("http://zlapka-localization:80/bond/event");
+    private String userPATH = "http://zlapka-user:80/event/";
 
     public ConnectionProvider() throws IOException { }
 
     public HttpURLConnection ownerBondConnection(String UUID, String action) throws IOException {
-        URL userURL = new URL(userPATH + "userId/events/" + action + "?userid=" + UUID );
+        URL userURL = new URL(userPATH + "userI" + action + "?userid=" + UUID );
         return (HttpURLConnection) userURL.openConnection();
     }
 
