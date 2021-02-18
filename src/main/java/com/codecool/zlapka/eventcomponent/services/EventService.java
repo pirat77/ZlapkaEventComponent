@@ -34,9 +34,9 @@ public class EventService {
     private boolean menageBonds(Event event, Action action){
         EventBond eventBond = new EventBond(event.getLocationId(),
                                             event.getIdString());
-        //OwnerBond ownerBond = new OwnerBond(event.getIdString(),
-        //                                    event.getOwnerId(),
-        //                                    event.getName());
+//        OwnerBond ownerBond = new OwnerBond(event.getIdString(),
+//                                            event.getOwnerId(),
+//                                            event.getName());
         System.out.println(eventBond.toJson());
         //System.out.println(ownerBond.toJson());
         return ApiCommands.bindToLocalization(eventBond, action); // && ApiCommands.bindToOwner(ownerBond, action);

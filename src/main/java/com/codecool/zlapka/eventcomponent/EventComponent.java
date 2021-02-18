@@ -10,7 +10,7 @@ class EventComponent {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(EventComponent.class);
-		app.setDefaultProperties(Collections.singletonMap("server.port", "10801"));
+		app.setDefaultProperties(Collections.singletonMap("server.port", "80"));
 		app.run(args);
 	}
 }
