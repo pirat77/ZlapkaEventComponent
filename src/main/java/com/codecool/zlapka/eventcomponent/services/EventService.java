@@ -39,7 +39,7 @@ public class EventService {
 //                                            event.getName());
         System.out.println(eventBond.toJson());
         //System.out.println(ownerBond.toJson());
-        return ApiCommands.bindToLocalization(eventBond, action); // && ApiCommands.bindToOwner(ownerBond, action);
+        return true; //ApiCommands.bindToLocalization(eventBond, action) && ApiCommands.bindToOwner(ownerBond, action);
     }
 
     public String getByStringId(String UUID){
