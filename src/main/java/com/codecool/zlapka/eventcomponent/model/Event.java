@@ -1,11 +1,9 @@
 package com.codecool.zlapka.eventcomponent.model;
 
-import com.codecool.zlapka.eventcomponent.Security.UUIDprovider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "event")
