@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class EventController {
 
-    private final String path = "/event";
-    private final String userPath = "/event/bond/user";
+    private final String path = "/";
+    private final String userPath = "/bond/user";
 
     @Autowired
     private EventService eventService;
