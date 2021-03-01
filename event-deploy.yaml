@@ -19,6 +19,7 @@ spec:
       containers:
       - name: event-component
         image: pirat0x77/zlapka-event-component-0.1:latest
+        imagePullPolicy: Always
         ports:
         - name: http
           containerPort: 80
